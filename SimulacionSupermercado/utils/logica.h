@@ -9,7 +9,7 @@
 //CONSTANTES
 #define FILAS 40
 #define COLUMNAS 84
-#define TIEMPO_BASE 100
+#define TIEMPO_BASE 10
 
 // Funcion para imprimir vista del supermercado cerrado
 void ImprimirInicioSupermercado(char *nombreSupermercado, int tamañoTitulo, int cajas, int *posicionesCajas);
@@ -21,7 +21,7 @@ void ImprimirCambiosCajas(cola **arrColasCajas, int cajas, int *arrPosicionesCaj
 void PosicionesCajas(int *arrPosicionesCajas, int cajas);
 
 // Funcion que tiene toda la logica mientras el supermercado esta abierto
-void AbrirSupermercado(int cajas, int *tiemposCajas, int *arrPosicionesCajas, int tiempoClientes);
+void AbrirSupermercado(int cajas, int *tiemposCajas, int *arrPosicionesCajas, int tiempoClientes, char *nombreSupermercado);
 
 // Funcion para hacer esperar al programa por un tiempo constante
 void EsperarMiliSeg(int t);
@@ -40,3 +40,6 @@ int NumeroAleatorio(int min, int max);
 
 // Funcion para validar si todas las cajas estan llenas
 int ColasLlenas(cola **colasCajas, int cajas);
+
+// Funcion para validar si todas las cajas estan vacias
+int ColasVacias(cola **colasCajas, int cajas);

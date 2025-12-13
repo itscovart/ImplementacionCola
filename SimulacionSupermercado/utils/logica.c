@@ -81,7 +81,7 @@ void ImprimirCambiosCajas(cola **arrColasCajas, int cajas, int *arrPosicionesCaj
     cola *direccionCola = arrColasCajas[i];
     if(!Empty(direccionCola)){
       for(int j = 0; j < Size(direccionCola); j++){
-        if(j < FILAS){
+        if(j < FILAS - 2){
           MoverCursor(arrPosicionesCajas[i] + 3, j + 4);
           printf("%d", Element(direccionCola, j + 1).valor);
         }
@@ -101,18 +101,16 @@ void PosicionesCajas(int *arrPosicionesCajas, int cajas){
   }
 }
 
-void AbrirSupermercado(int cajas, int *tiemposCajas, int *arrPosicionesCajas, int tiempoClientes){
-  EsperarMiliSeg(TIEMPO_BASE);
-
+void AbrirSupermercado(int cajas, int *tiemposCajas, int *arrPosicionesCajas, int tiempoClientes, char *nombreSupermercado){
   elemento clienteAtendidos, clientesNuevos;
-  int tiempo = 0, numeroCaja;
-
+  int tiempo = 0, numeroCaja, clientesSatisfechos = 0;
+  
   cola **colasCajas = malloc(cajas * sizeof(cola*)), *direccionMemoriaCaja;
   if(!colasCajas){
     printf("Error al reservar memoria para el arreglo de las colas");
     exit(1);
   }
-
+  
   clientesNuevos.valor = 1;
   for(int i = 0; i < cajas; i++){
     colasCajas[i] = (cola*)malloc(sizeof(cola));
@@ -122,8 +120,9 @@ void AbrirSupermercado(int cajas, int *tiemposCajas, int *arrPosicionesCajas, in
     }
     Inicializar(colasCajas[i]);
   }
-
+  
   while(1){
+    EsperarMiliSeg(TIEMPO_BASE);
     tiempo += 10;
 
     if(tiempo % tiempoClientes == 0){
@@ -142,8 +141,14 @@ void AbrirSupermercado(int cajas, int *tiemposCajas, int *arrPosicionesCajas, in
       direccionMemoriaCaja = colasCajas[i];
       if(tiempo % tiemposCajas[i] == 0 && !Empty(direccionMemoriaCaja)){
         clienteAtendidos = Dequeue(direccionMemoriaCaja);
+        clientesSatisfechos++;
         ImprimirCambiosCajas(colasCajas, cajas, arrPosicionesCajas);
+        MoverCursor(0, FILAS + 1);
         printf("\nUltimo cliente atendido: Numero.%d en la caja %d\n", clienteAtendidos.valor, i + 1);
+        if(clientesSatisfechos >= 100 && ColasVacias(colasCajas, cajas)){
+          printf("%s se ha cerrado debido a que se han atentido satisfactoriamente a 100 clientes y no queda nadie dentro de la tienda", nombreSupermercado);
+          exit(0);
+        }
       }
     }
   }
@@ -153,6 +158,14 @@ int ColasLlenas(cola **colasCajas, int cajas){
   int cajasLlenas = 0;
   for(int i = 0; i < cajas; i++){
     if(Size(colasCajas[i]) == TAMAÑO_MAXIMO) cajasLlenas++;
+  }
+  return cajasLlenas == cajas;
+}
+
+int ColasVacias(cola **colasCajas, int cajas){
+  int cajasLlenas = 0;
+  for(int i = 0; i < cajas; i++){
+    if(Size(colasCajas[i]) == 0) cajasLlenas++;
   }
   return cajasLlenas == cajas;
 }

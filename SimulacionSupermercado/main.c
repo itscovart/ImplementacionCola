@@ -66,10 +66,10 @@ int main(int argc, char *argv[]){
   }
 
   ImprimirInicioSupermercado(nombreSupermercado, tamañoTitulo, cajas, posicionesCajas);
-  printf("1. Si\n2. No\nDesea abrir el %s?: ", nombreSupermercado);
+  printf("1. Si\n2. No\nDeseas abrir %s?: ", nombreSupermercado);
   scanf("%d", &abrirSupermercado);
   if(abrirSupermercado == 1){
-    AbrirSupermercado(cajas, tiemposCajas, posicionesCajas, tiempoClientes);
+    AbrirSupermercado(cajas, tiemposCajas, posicionesCajas, tiempoClientes, nombreSupermercado);
   } else {
     printf("Destruyendo %s...", nombreSupermercado);
     exit(0);
