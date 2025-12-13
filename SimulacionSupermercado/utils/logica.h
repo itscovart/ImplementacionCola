@@ -9,7 +9,7 @@
 //CONSTANTES
 #define FILAS 40
 #define COLUMNAS 84
-#define TIEMPO_BASE 10
+#define TIEMPO_BASE 3
 
 // Funcion para imprimir vista del supermercado cerrado
 void ImprimirInicioSupermercado(char *nombreSupermercado, int tamañoTitulo, int cajas, int *posicionesCajas);

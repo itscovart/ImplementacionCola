@@ -114,11 +114,15 @@ void ImprimirCambiosCajas(cola **arrColasCajas, int cajas, int *arrPosicionesCaj
 
 void PosicionesCajas(int *arrPosicionesCajas, int cajas){
   int primerIndice = ((COLUMNAS)/(cajas + 1));
-  for (int i = 0; i < cajas; i++){
-    if(i == 0){
-      arrPosicionesCajas[i] = primerIndice - 4;
-    } else {
-      arrPosicionesCajas[i] = arrPosicionesCajas[i - 1] + 8;
+  if(cajas == 1){
+    arrPosicionesCajas[0] = primerIndice - 4;
+  } else {
+    for (int i = 0; i < cajas; i++){
+      if(i == 0){
+        arrPosicionesCajas[i] = primerIndice - 7;
+      } else {
+        arrPosicionesCajas[i] = arrPosicionesCajas[i - 1] + 8 + arrPosicionesCajas[0];
+      }
     }
   }
 }
