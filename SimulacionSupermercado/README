@@ -1,0 +1,2 @@
+EJECUCION DEL PROGRAMA
+gcc -o main main.c Cola/ColaEstatica.c utils/logica.c
