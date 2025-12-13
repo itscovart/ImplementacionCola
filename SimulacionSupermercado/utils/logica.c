@@ -9,6 +9,9 @@
 #include <time.h>
 #include <unistd.h>  
 #include "logica.h"
+#ifdef _WIN32
+  #include <windows.h>
+#endif
 
 //FUNCIONES
 void EsperarMiliSeg(int t){
@@ -16,17 +19,32 @@ void EsperarMiliSeg(int t){
 }
 
 void BorrarPantalla(){
-  system("clear");
+  #ifdef _WIN32
+    system("cls");
+  #else
+    system("clear");
+  #endif
 }
 
 void MoverCursor( int x, int y ) 
 {
-	printf("\033[%d;%dH", y, x);
+  #ifdef _WIN32
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD position = { x, y }; 
+    SetConsoleCursorPosition( hStdout, position );
+  #else
+	  printf("\033[%d;%dH", y, x);
+  #endif
 }
 
 void LimpiarInformacionColas(){
-  MoverCursor(0, 5);
-  printf("\033[J");
+  #ifdef _WIN32
+    BorrarPantalla();
+    ImprimirInicioSupermercado();
+  #else
+    MoverCursor(0, 5);
+    printf("\033[J");
+  #endif
 }
 
 int NumeroAleatorio(int min, int max){
