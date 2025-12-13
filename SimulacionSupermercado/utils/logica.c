@@ -15,7 +15,11 @@
 
 //FUNCIONES
 void EsperarMiliSeg(int t){
-  usleep(t*1000);
+  #ifdef _WIN32
+    Sleep(t);
+  #else
+    usleep(t*1000);
+  #endif
 }
 
 void BorrarPantalla(){
