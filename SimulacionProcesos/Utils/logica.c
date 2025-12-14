@@ -28,6 +28,7 @@ void EsperarMilisegundos(int t){
   #endif
 }
 
+#ifdef COLAESTATICA_DISPONIBLE
 void ImprimirCola(cola *c, int tipoCola, int tiempo){
   int cantElementos = Size(c);
   elemento proceso;
@@ -42,3 +43,23 @@ void ImprimirCola(cola *c, int tipoCola, int tiempo){
     }
   }
 }
+#else
+void ImprimirCola(cola *c, int tipoCola, int tiempo){
+  int cantElementos = Size(c);
+  nodo *proceso;
+  elemento nodoActual;
+  proceso = c->frente;
+
+  for(int i = 0; i < cantElementos; i++){
+    nodoActual = proceso->valor;
+    if(tipoCola){
+      printf("%d. %s finalizado despues de %dms\n", (i + 1), nodoActual.nombreProceso, nodoActual.tiempoProcesoMS);
+    } else {
+      if(i != 0){
+        printf("%d. %s en espera de ejecucion\n", i, nodoActual.nombreProceso);
+      }
+    }
+    proceso = proceso->sig;
+  }
+}
+#endif

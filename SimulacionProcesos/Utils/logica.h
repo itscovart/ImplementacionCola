@@ -4,10 +4,11 @@
 */
 
 // LIBRERIAS
-#include "../Cola/ColaEstatica.h"
+//#include "../Cola/ColaEstatica.h"
+#include "../Cola/ColaDin.h" // En caso de querer usar pila dinamica
 
 // CONSTANTES
-#define TIEMPO_BASE 200
+#define TIEMPO_BASE 100
 
 // FUNCIONES
 void BorrarPantalla();

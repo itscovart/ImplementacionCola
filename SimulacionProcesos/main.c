@@ -60,8 +60,8 @@ int main(int argc, char *argv[]){
     Inicializar(procesosCompletados);
 
     while(!Empty(procesosRestantes)){
-      BorrarPantalla();
       EsperarMilisegundos(TIEMPO_BASE);
+      BorrarPantalla();
       tiempo++;
       
       elemento procesoEjecucion = Front(procesosRestantes), procesoCompletado;
