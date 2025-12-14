@@ -144,7 +144,7 @@ void AbrirSupermercado(int cajas, int *tiemposCajas, int *arrPosicionesCajas, in
   
   while(1){
     EsperarMiliSeg(TIEMPO_BASE);
-    tiempo += 10;
+    tiempo++;
 
     if(tiempo % tiempoClientes == 0){
       #ifdef COLAESTATICA_DISPONIBLE
