@@ -54,3 +54,7 @@ elemento Element(cola *c, int indice);
 
 // Destroy: Recibe una cola y elimina todos los elementos que contiene
 void Destroy(cola *c);
+
+#ifndef COLAESTATICA_DISPONIBLE
+#define COLAESTATICA_DISPONIBLE
+#endif

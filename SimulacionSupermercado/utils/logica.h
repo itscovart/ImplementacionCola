@@ -4,7 +4,8 @@
 */
 
 // LIBRERIAS
-#include "../Cola/ColaEstatica.h"
+// #include "../Cola/ColaEstatica.h"
+#include "../Cola/ColaDin.h" // En caso de que se quiera hacer con una cola dinamica
 
 //CONSTANTES
 #define FILAS 40
@@ -38,8 +39,12 @@ void MoverCursor(int x, int y);
 // Funcion para generar un numero aleatorio entre un rango en especifico
 int NumeroAleatorio(int min, int max);
 
+#ifdef COLAESTATICA_DISPONIBLE
+
 // Funcion para validar si todas las cajas estan llenas
 int ColasLlenas(cola **colasCajas, int cajas);
+
+#endif
 
 // Funcion para validar si todas las cajas estan vacias
 int ColasVacias(cola **colasCajas, int cajas);

@@ -42,13 +42,8 @@ void MoverCursor( int x, int y )
 }
 
 void LimpiarInformacionColas(){
-  #ifdef _WIN32
-    BorrarPantalla();
-    ImprimirInicioSupermercado();
-  #else
     MoverCursor(0, 5);
     printf("\033[J");
-  #endif
 }
 
 int NumeroAleatorio(int min, int max){
@@ -152,6 +147,7 @@ void AbrirSupermercado(int cajas, int *tiemposCajas, int *arrPosicionesCajas, in
     tiempo += 10;
 
     if(tiempo % tiempoClientes == 0){
+      #ifdef COLAESTATICA_DISPONIBLE
       if(ColasLlenas(colasCajas, cajas)){
         printf("Todas las colas estan llenas");
         exit(0);
@@ -161,6 +157,12 @@ void AbrirSupermercado(int cajas, int *tiemposCajas, int *arrPosicionesCajas, in
         } while (!Queue(colasCajas[numeroCaja - 1], clientesNuevos));
         clientesNuevos.valor++;
       }
+      #else
+      numeroCaja = NumeroAleatorio(1, cajas);
+      Queue(colasCajas[numeroCaja - 1], clientesNuevos);
+      clientesNuevos.valor++;
+      #endif
+
     }
 
     for(int i = 0; i < cajas; i++){
@@ -180,6 +182,7 @@ void AbrirSupermercado(int cajas, int *tiemposCajas, int *arrPosicionesCajas, in
   }
 }
 
+#ifdef COLAESTATICA_DISPONIBLE
 int ColasLlenas(cola **colasCajas, int cajas){
   int cajasLlenas = 0;
   for(int i = 0; i < cajas; i++){
@@ -187,6 +190,7 @@ int ColasLlenas(cola **colasCajas, int cajas){
   }
   return cajasLlenas == cajas;
 }
+#endif
 
 int ColasVacias(cola **colasCajas, int cajas){
   int cajasLlenas = 0;
