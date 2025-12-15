@@ -45,6 +45,3 @@ int NumeroAleatorio(int min, int max);
 int ColasLlenas(cola **colasCajas, int cajas);
 
 #endif
-
-// Funcion para validar si todas las cajas estan vacias
-int ColasVacias(cola **colasCajas, int cajas);

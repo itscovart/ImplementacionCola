@@ -210,10 +210,6 @@ void AbrirBanco(int cajas, int *tiemposCajas, int *arrPosicionesCajas, int *tiem
         ImprimirCambiosCajas(colasCajas, cajas, arrPosicionesCajas);
         MoverCursor(0, FILAS + 1);
         printf("\nUltimo cliente atendido: Numero.%s en la caja %d\n", clienteAtendidos.cliente, i + 1);
-        if(clientesSatisfechos >= 100 && ColasVacias(colasCajas, cajas)){
-          printf("%s se ha cerrado debido a que se han atentido satisfactoriamente a 100 clientes y no queda nadie dentro de la tienda", nombreBanco);
-          exit(0);
-        }
       }
     }
   }
@@ -228,11 +224,3 @@ int ColasLlenas(cola **colasCajas, int cajas){
   return cajasLlenas == cajas;
 }
 #endif
-
-int ColasVacias(cola **colasCajas, int cajas){
-  int cajasLlenas = 0;
-  for(int i = 0; i < cajas; i++){
-    if(Size(colasCajas[i]) == 0) cajasLlenas++;
-  }
-  return cajasLlenas == cajas;
-}
