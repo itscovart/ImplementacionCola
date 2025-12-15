@@ -124,7 +124,7 @@ void PosicionesCajas(int *arrPosicionesCajas, int cajas){
 
 void AbrirBanco(int cajas, int *tiemposCajas, int *arrPosicionesCajas, int *tiemposClientes, char *nombreBanco){
   elemento clienteAtendidos, clientesNuevos;
-  int tiempo = 0, numeroCaja, clientesSatisfechos = 0, cantNormal = 1, cantUsuario = 1, cantPreferente = 1;
+  int tiempo = 0, numeroCaja, clientesSatisfechos = 0, cantNormal = 1, cantUsuario = 1, cantPreferente = 1, clientesExceptoUsuarios = 0;
   
   cola **colasCajas = malloc(cajas * sizeof(cola*)), *direccionMemoriaCaja;
   if(!colasCajas){
@@ -145,26 +145,31 @@ void AbrirBanco(int cajas, int *tiemposCajas, int *arrPosicionesCajas, int *tiem
     EsperarMiliSeg(TIEMPO_BASE);
     tiempo++;
 
-    if(tiempo % tiemposClientes[2] == 0){
-      snprintf(clientesNuevos.cliente, sizeof(clientesNuevos.cliente), "P%d", cantPreferente);
-      #ifdef COLAESTATICA_DISPONIBLE
-      if(ColasLlenas(colasCajas, cajas)){
-        printf("Todas las colas estan llenas");
-        exit(0);
-      } else {
-        do{
-          numeroCaja = NumeroAleatorio(1, cajas);
-        } while (!Queue(colasCajas[numeroCaja - 1], clientesNuevos));
+    if(!(tiempo % tiemposClientes[1] == 0 && clientesExceptoUsuarios == 5)){
+      if(tiempo % tiemposClientes[2] == 0){
+        snprintf(clientesNuevos.cliente, sizeof(clientesNuevos.cliente), "P%d", cantPreferente);
+        #ifdef COLAESTATICA_DISPONIBLE
+        if(ColasLlenas(colasCajas, cajas)){
+          printf("Todas las colas estan llenas");
+          exit(0);
+        } else {
+          do{
+            numeroCaja = NumeroAleatorio(1, cajas);
+          } while (!Queue(colasCajas[numeroCaja - 1], clientesNuevos));
+          cantPreferente++;
+          clientesExceptoUsuarios++;
+        }
+        #else
+        numeroCaja = NumeroAleatorio(1, cajas);
+        Queue(colasCajas[numeroCaja - 1], clientesNuevos);
         cantPreferente++;
+        clientesExceptoUsuarios++;
+        #endif
       }
-      #else
-      numeroCaja = NumeroAleatorio(1, cajas);
-      Queue(colasCajas[numeroCaja - 1], clientesNuevos);
-      cantPreferente++;
-      #endif
     }
 
     if(tiempo % tiemposClientes[1] == 0){
+      clientesExceptoUsuarios = 0;
       snprintf(clientesNuevos.cliente, sizeof(clientesNuevos.cliente), "U%d", cantUsuario);
       #ifdef COLAESTATICA_DISPONIBLE
       if(ColasLlenas(colasCajas, cajas)){
@@ -194,11 +199,13 @@ void AbrirBanco(int cajas, int *tiemposCajas, int *arrPosicionesCajas, int *tiem
           numeroCaja = NumeroAleatorio(1, cajas);
         } while (!Queue(colasCajas[numeroCaja - 1], clientesNuevos));
         cantNormal++;
+        clientesExceptoUsuarios++;
       }
       #else
       numeroCaja = NumeroAleatorio(1, cajas);
       Queue(colasCajas[numeroCaja - 1], clientesNuevos);
       cantNormal++;
+      clientesExceptoUsuarios++;
       #endif
     }
 
