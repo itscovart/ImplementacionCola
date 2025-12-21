@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
     printf("Error al asignar memorio");
     exit(1);
   }
-  int cantProcesos, tiempo = 0;
+  int cantProcesos, tiempo = 0, modoOperacion;
 
   if(argc != 2){
     printf("Error al ejecutar el programa. Ejemplo: %s 10", argv[0]);
@@ -48,6 +48,7 @@ int main(int argc, char *argv[]){
 
     printf("Tiempo de proceso (ms): ");
     scanf("%d", &infoProceso.tiempoProcesoMS);
+    infoProceso.tiempoProcesoMSActualizado = infoProceso.tiempoProcesoMS;
 
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
@@ -57,28 +58,51 @@ int main(int argc, char *argv[]){
     }
   }
 
-    Inicializar(procesosCompletados);
+  printf("En que forma quieres que se completen los procesos?\n1.Uno por uno\n2.Tiempo Constante para todos\n");
+  scanf("%d", &modoOperacion);
 
-    while(!Empty(procesosRestantes)){
-      EsperarMilisegundos(TIEMPO_BASE);
-      BorrarPantalla();
-      tiempo++;
-      
-      elemento procesoEjecucion = Front(procesosRestantes), procesoCompletado;
-      
+  #ifndef QUANTUM
+    #define QUANTUM 1000
+  #endif
+
+  Inicializar(procesosCompletados);
+
+  while(!Empty(procesosRestantes)){
+    EsperarMilisegundos(TIEMPO_BASE);
+    BorrarPantalla();
+    tiempo++;
+    
+    elemento procesoEjecucion = Front(procesosRestantes);
+    elemento procesoCompletado;
+    if (modoOperacion != 2){
       if(tiempo % procesoEjecucion.tiempoProcesoMS == 0){
         procesoCompletado = Dequeue(procesosRestantes);
         printf("Finalizado el proceso de %s\n", procesoCompletado.nombreProceso);
         Queue(procesosCompletados, procesoCompletado);
         tiempo = 0;
       }
-
-      printf("Proceso en Ejecucion:\nNombre: %s\nID: %s\nActividad: %s\nTiempo Restante: %dms\nTiempo Procesado: %dms\n", procesoEjecucion.nombreProceso, procesoEjecucion.ID, procesoEjecucion.actividad, (procesoEjecucion.tiempoProcesoMS - tiempo), tiempo);
-      printf("\nProcesos Restantes:\n");
-      ImprimirCola(procesosRestantes, 0, tiempo);
-      printf("\nProcesos Completados:\n");
-      ImprimirCola(procesosCompletados, 1, tiempo);
-      
+    } else {
+      if(tiempo < QUANTUM){
+        if(tiempo % procesoEjecucion.tiempoProcesoMSActualizado == 0){
+          procesoCompletado = Dequeue(procesosRestantes);
+          printf("Finalizado el proceso de %s\n", procesoCompletado.nombreProceso);
+          Queue(procesosCompletados, procesoCompletado);
+          tiempo = 0;
+        }
+      } else {
+        procesoCompletado = Dequeue(procesosRestantes);
+        procesoCompletado.tiempoProcesoMSActualizado = procesoCompletado.tiempoProcesoMSActualizado - tiempo;
+        Queue(procesosRestantes, procesoCompletado);
+        tiempo = 0;
+      }
     }
+
+    printf("Proceso en Ejecucion:\nNombre: %s\nID: %s\nActividad: %s\nTiempo Restante: %dms\nTiempo Procesado: %dms\n", procesoEjecucion.nombreProceso, procesoEjecucion.ID, procesoEjecucion.actividad, (procesoEjecucion.tiempoProcesoMSActualizado - tiempo), tiempo);
+    printf("\nProcesos Restantes:\n");
+    ImprimirCola(procesosRestantes, 0, tiempo);
+    printf("\nProcesos Completados:\n");
+    ImprimirCola(procesosCompletados, 1, tiempo);
+    
+  }
   exit(0);
 }

@@ -19,6 +19,7 @@ typedef struct elemento {
   char actividad[200];
   char ID[45];
   int tiempoProcesoMS;
+  int tiempoProcesoMSActualizado;
 } elemento;
 
 // Definicion de la estructura que tendra la cola donde se incluyen los elementos que tendra, un frente, un final y un contador para el tamaño de la cola

@@ -18,6 +18,7 @@ typedef struct elemento {
   char actividad[200];
   char ID[45];
   int tiempoProcesoMS;
+  int tiempoProcesoMSActualizado;
 } elemento;
 
 // Definicion de un struct donde se almancera el valor de un elemento y su nodo siguiente
